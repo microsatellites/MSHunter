@@ -147,7 +147,6 @@ def genotype(parase):
         logger.error("Genotype init ERROR!")
         return -1
     paras = get_value("paras")
-    # print(paras)
     if get_value("paras")["tech"] == "ilm":
         genotype_ngs(paras)
     elif get_value("paras")["tech"] == "ccs":
