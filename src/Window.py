@@ -166,21 +166,21 @@ class Window:
         # for ms_id, reads_info in microsatellites_dict.items():
         #     self.microsatellites[ms_id].set_muts_info(reads_info)
 
-    def genotype_one_microsatellite_ccs_contig(self, microsatellite):
-        # microsatellite.get_dis()
-        microsatellite.one_hap_genotype()
-        return microsatellite
+    # def genotype_one_microsatellite_ccs_contig(self, microsatellite):
+    #     # microsatellite.get_dis()
+    #     microsatellite.one_hap_genotype()
+    #     return microsatellite
 
     def genotype_one_microsatellite_ccs(self, microsatellite):
         # microsatellite.get_dis()
 
         return microsatellite
 
-    def genotype_microsatellite_ccs_contig(self):
-        microsatellites = []
-        for microsatellite in self.microsatellites.values():
-            microsatellites.append(self.genotype_one_microsatellite_ccs_contig(microsatellite))
-        self.microsatellites = {ms.ms_id: ms for ms in microsatellites}
+    # def genotype_microsatellite_ccs_contig(self):
+    #     microsatellites = []
+    #     for microsatellite in self.microsatellites.values():
+    #         microsatellites.append(self.genotype_one_microsatellite_ccs_contig(microsatellite))
+    #     self.microsatellites = {ms.ms_id: ms for ms in microsatellites}
 
     def call_variants(self):
         microsatellites = []
@@ -194,48 +194,48 @@ class Window:
             microsatellites.append(microsatellite)
         self.microsatellites = {ms.ms_id: ms for ms in microsatellites}
 
-    def write_to_vcf_ccs_contig(self, file_output):
-        # logger.info("\tWrite to vcf ... ")
-        recs = []
-        for ms_id in self.microsatellites_id:
-            # print(ms_id)
-            # print(self.microsatellites)
-            ms = self.microsatellites[ms_id]
-            vcfrec = file_output.new_record()
-            # print("infoKey",vcfrec.info.keys())
-            vcfrec.contig = ms.chrom
-            # vcfrec.stop = pos + ms.repeat_times * len(ms.motif)
-            vcfrec.pos = ms.mut_start
-            vcfrec.ref = ms.ref_str
-            vcfrec.alts = (ms.alt_str,) if ms.alt_str != "" else (".",)
-            vcfrec.id = ms.ms_id
-            vcfrec.stop = ms.mut_end
-            vcfrec.info["ms_start"] = ms.start
-            vcfrec.info["ms_end"] = ms.end
-            vcfrec.info["motif"] = ms.repeat_unit
-            vcfrec.info["repeat_times"] = ms.repeat_times
-            vcfrec.info["motif_len"] = ms.repeat_unit_len
-            vcfrec.info["ref_repeat_length"] = ms.repeat_len
-            vcfrec.info["start_pre"] = ms.start_pre
-            vcfrec.info["end_suf"] = ms.end_suf
-            vcfrec.info["mut_start"] = ms.mut_start
-            vcfrec.info["mut_end"] = ms.mut_end
-
-            vcfrec.info["query_repeat_length"] = ms.query_repeat_length
-            vcfrec.info["dis_stat"] = str(ms.dis_stat)
-            vcfrec.info["check"] = str(ms.check)
-            vcfrec.info["check_stats"] = "|".join(ms.check_status)
-            vcfrec.info["dis"] = "|".join(
-                [str(key) + ":" + str(value) for key, value in ms.ms_dis.items()])
-            # vcfrec.info["allele"] = ms.allele
-            # if ms.check:
-            vcfrec.info["var_type"] = ms.mut.var_type
-            vcfrec.info["var_type_list"] = ms.mut.var_type_detail
-            # print(ms.mut_type.var_prefix,ms.mut_type.var_ms,ms.mut_type.var_suffix)
-            vcfrec.info["var_detail"] = ms.mut.var_detail_str
-            # file_output.write(vcfrec)
-            recs.append(vcfrec)
-        return recs
+    # def write_to_vcf_ccs_contig(self, file_output):
+    #     # logger.info("\tWrite to vcf ... ")
+    #     recs = []
+    #     for ms_id in self.microsatellites_id:
+    #         # print(ms_id)
+    #         # print(self.microsatellites)
+    #         ms = self.microsatellites[ms_id]
+    #         vcfrec = file_output.new_record()
+    #         # print("infoKey",vcfrec.info.keys())
+    #         vcfrec.contig = ms.chrom
+    #         # vcfrec.stop = pos + ms.repeat_times * len(ms.motif)
+    #         vcfrec.pos = ms.mut_start
+    #         vcfrec.ref = ms.ref_str
+    #         vcfrec.alts = (ms.alt_str,) if ms.alt_str != "" else (".",)
+    #         vcfrec.id = ms.ms_id
+    #         vcfrec.stop = ms.mut_end
+    #         vcfrec.info["ms_start"] = ms.start
+    #         vcfrec.info["ms_end"] = ms.end
+    #         vcfrec.info["motif"] = ms.repeat_unit
+    #         vcfrec.info["repeat_times"] = ms.repeat_times
+    #         vcfrec.info["motif_len"] = ms.repeat_unit_len
+    #         vcfrec.info["ref_repeat_length"] = ms.repeat_len
+    #         vcfrec.info["start_pre"] = ms.start_pre
+    #         vcfrec.info["end_suf"] = ms.end_suf
+    #         vcfrec.info["mut_start"] = ms.mut_start
+    #         vcfrec.info["mut_end"] = ms.mut_end
+    #
+    #         vcfrec.info["query_repeat_length"] = ms.query_repeat_length
+    #         vcfrec.info["dis_stat"] = str(ms.dis_stat)
+    #         vcfrec.info["check"] = str(ms.check)
+    #         vcfrec.info["check_stats"] = "|".join(ms.check_status)
+    #         vcfrec.info["dis"] = "|".join(
+    #             [str(key) + ":" + str(value) for key, value in ms.ms_dis.items()])
+    #         # vcfrec.info["allele"] = ms.allele
+    #         # if ms.check:
+    #         vcfrec.info["var_type"] = ms.mut.var_type
+    #         vcfrec.info["var_type_list"] = ms.mut.var_type_detail
+    #         # print(ms.mut_type.var_prefix,ms.mut_type.var_ms,ms.mut_type.var_suffix)
+    #         vcfrec.info["var_detail"] = ms.mut.var_detail_str
+    #         # file_output.write(vcfrec)
+    #         recs.append(vcfrec)
+    #     return recs
 
     def write_to_vcf_call_variants_complex(self, file_output):
         recs = []
@@ -597,17 +597,17 @@ class Window:
             recs.append(vcfrec)
         return recs
 
-    def run_window_benchmark(self):
-        """
-        For CCS contig benchmark
-        Returns:
-        """
-        self.init_microsatellites()  # 并行
-        self.init_reads()  # 扫描read 确实其对应的 MS
-        self.get_reads_info()  # 处理read 并行
-        self.merge_muts_info()  # 合并read信息为MS信息
-        self.genotype_microsatellite_ccs_contig()  # 变异检测 并行
-        # self.write_to_vcf_ccs_contig(file_output)  # 一条一条写入
+    # def run_window_benchmark(self):
+    #     """
+    #     For CCS contig benchmark
+    #     Returns:
+    #     """
+    #     self.init_microsatellites()  # 并行
+    #     self.init_reads()  # 扫描read 确实其对应的 MS
+    #     self.get_reads_info()  # 处理read 并行
+    #     self.merge_muts_info()  # 合并read信息为MS信息
+    #     self.genotype_microsatellite_ccs_contig()  # 变异检测 并行
+    #     # self.write_to_vcf_ccs_contig(file_output)  # 一条一条写入
 
     def run_window_pre_stat(self):
         """
@@ -630,13 +630,3 @@ class Window:
         self.get_reads_info(only_simple=self.paras["only_simple"])
         self.merge_muts_info(only_simple=self.paras["only_simple"])  # 合并read信息为MS信息
         self.call_variants()
-
-        #
-        # if self.paras["only_simple"]:
-        #     self.get_reads_dis()
-        #     self.merge_reads_repeat_length_distribution()
-        # else:
-        #     self.get_reads_info()
-        #     self.merge_muts_info()  # 合并read信息为MS信息
-        # # self.merge_reads_info()
-        # self.call_variants()

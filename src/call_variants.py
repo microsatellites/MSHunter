@@ -347,7 +347,7 @@ def call_variants(df_microsatellites):
     contigs_info = get_value("contigs_info")
     if args["debug"]:
         locis_num = 10000
-        df_microsatellites = df_microsatellites.iloc[100000:locis_num + 100000, :]
+        df_microsatellites = df_microsatellites.iloc[106000:locis_num + 106000, :]
     args["ms_num"] = len(df_microsatellites)
     total_current_num = 0
     for contig, contig_len in contigs_info.items():

@@ -27,5 +27,5 @@ def genotype_ccs(paras):
     df_microsatellites = load_microsatellites(paras)
     # pre_stat(df_microsatellites) # TODO run this step in release version
     # estimate_error() # TODO run this step in release version
-    load_model(paras)  # TODO ignore run pre_stat and estimate process when debug
+    # load_model(paras)  # TODO ignore run pre_stat and estimate process when debug
     call_variants(df_microsatellites)

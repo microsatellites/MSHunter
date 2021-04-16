@@ -1,9 +1,22 @@
-!/bin/bash
-output_dir="/mnt/project/ProjectMSI/MSCalling/note/py/test_mshunter/"
-/home/pengjia/miniconda3/envs/default/bin/python /mnt/project/ProjectMSI/MSCalling/note/py/MSHunter/src/main.py genotype \
-  -i /media/pengjia/ZS6Y_Feng_1/GIAB/NA12878/HG001_GRCh38.haplotag.RTG.trio.bam \
-  -o ${output_dir}ccs \
-  -m /mnt/project/ProjectMSI/MSCalling/Data/ref/microsatellite/GRCh38_l5_m100_20200528.no.list.mshunter_chr1 \
-  -r /mnt/project/REF/GRCh38_full_analysis_set_plus_decoy_hla.fa \
-  -t 1 -b 1000 -d True -tech ccs --only_simple  False
+#!/bin/bash
+
+output_dir="/home/DATA/ProjectSTR/codes/test/CCS/"
+path_microsatellite_regions="/home/DATA/ProjectSTR/data/microsatellite_regions/GRCh38_l5_m100_20200528.no.list_chr8"
+path_ref="/home/pengjia/REF/GRCh38_full_analysis_set_plus_decoy_hla/genome/GRCh38_full_analysis_set_plus_decoy_hla.fa"
+#/home/pengjia/miniconda3/envs/default/bin/python /home/DATA/ProjectSTR/codes/MSHunter/src/main.py genotype \
+#  -i /home/DATA/ProjectSTR/codes/test/CCS/HG00733.CCS.GRCh38.bam \
+#  -o ${output_dir}ccs \
+#  -m ${path_microsatellite_regions} \
+#  -r ${path_ref} \
+#  -t 1 -b 1000 -d True -tech ccs --only_simple  True
+#
+
+
+/home/pengjia/miniconda3/envs/default/bin/python /home/DATA/ProjectSTR/codes/MSHunter/src/main.py genotype \
+  -i /home/DATA/ProjectSTR/codes/test/ILM/HG00733.ILM.GRCh38.bam \
+  -o ${output_dir}ilm \
+  -m ${path_microsatellite_regions} \
+  -r ${path_ref} \
+  -t 1 -b 1000 -d True -tech ccs --only_simple  True
+
 

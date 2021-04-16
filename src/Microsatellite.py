@@ -127,6 +127,8 @@ class Microsatellite:
 
     def set_read_dis_info(self, reads_info):
         # self.reads_info = reads_info
+        if len(reads_info)  <= 0:
+            return
         dis = {}
         dis_strand = {True: {}, False: {}}
         dis_hap = {0: {}, 1: {}, 2: {}}
@@ -165,6 +167,8 @@ class Microsatellite:
         self.ms_dis_hap2 = dis_hap[2]
         self.ms_dis_forward = dis_strand[True]
         self.ms_dis_reversed = dis_strand[False]
+        # print(self.depth)
+        # print(dis)
         self.query_repeat_length = get_max_support_index(dis)
         dis_hap0_num = sum(dis_hap[0].values())
         dis_hap1_num = sum(dis_hap[1].values())
@@ -254,158 +258,6 @@ class Microsatellite:
         quals["suffix_reversed"] = np.array(suffix_reversed)
         quals["ms_reversed"] = np.array(ms_reversed)
         return reads, quals
-
-    def get_mut_one_hap(self, hap_info, hap_ms_mut):
-        mut_starts = []
-        mut_ends = []
-        mut_types = []
-        reads_str = []
-        for mut in hap_info:
-            mut_start, mut_end, mut_type = mut.get_mut_by_read()
-            # print(mut_start, mut_end, mut_type)
-            last_prefix = mut.read_str[self.start - self.start_pre]
-            if len(last_prefix) > self.repeat_unit_len:
-                last_prefix = last_prefix[::-1]
-                repea_unit_rev = self.repeat_unit
-                unit = 0
-                while 1:
-                    if last_prefix[:self.repeat_unit_len] == repea_unit_rev:
-                        unit += 1
-                        last_prefix = last_prefix[self.repeat_unit_len:]
-                    else:
-                        break
-                mut.read_str[self.start - self.start_pre] = last_prefix
-                mut.read_str[self.start - self.start_pre + 1] = self.repeat_unit * unit + \
-                                                                mut.read_str[self.start - self.start_pre + 1]
-            if mut_start < 0: continue
-            mut_starts.append(mut_start)
-            mut_ends.append(mut_end)
-            mut_types.extend(mut_type)
-            reads_str.append(mut.read_str)
-        if len(mut_starts) < self.minimum_support_reads:
-            return []
-        start_pos = min(mut_starts)
-        end_pos = max(mut_ends)
-        if self.ms_mutation:
-            start_pos = min([start_pos, self.start])
-            end_pos = max([end_pos, self.end])
-
-        this_start = start_pos - (self.start_pre - 1)
-        this_end = end_pos - (self.start_pre - 1)
-
-        # if self.ms_mutation:
-        #     print(this_start, self.start - (self.start_pre - 1))
-        #     print(this_end, self.end - (self.start_pre - 1))
-        #     this_start = min([this_start, self.start - (self.start_pre - 1)])
-        #     this_end = max([this_end, self.end - (self.start_pre - 1)])
-        tran_reads_str = np.transpose(reads_str)
-        alt_str = []
-        for pos in range(this_start, this_end + 1):
-            counts = Counter(tran_reads_str[pos])
-            alt_str.append(counts.most_common(1)[0][0])
-        alt_str = "".join(alt_str)
-        ref_str = self.ref_all[this_start:this_end + 1]
-        right_shift = 0
-        for ref_base, alt_base in zip(ref_str[::-1], alt_str[::-1]):
-            if ref_base == alt_base:
-                right_shift += 1
-            else:
-                break
-        if right_shift > 0:
-            ref_str = ref_str[:-right_shift]
-            alt_str = alt_str[:-right_shift]
-
-        left_shift = 0
-        for ref_base, alt_base in zip(ref_str, alt_str):
-            if ref_base == alt_base:
-                left_shift += 1
-            else:
-                break
-        ref_str = ref_str[left_shift:]
-        alt_str = alt_str[left_shift:]
-
-        ref_str_len = len(ref_str)
-        alt_str_len = len(alt_str)
-        mutation_events = []
-
-        if ref_str_len == alt_str_len:
-            if ref_str_len == 0:
-                pass
-            elif ref_str_len == 1:
-                mutation_type = "SNV"
-                mutation_description = "SNV"
-                start_pos = start_pos + left_shift
-                end_pos = end_pos - right_shift
-                mutation_events.append([start_pos, end_pos, ref_str, alt_str, mutation_type, mutation_description])
-            else:
-                if ref_str_len <= self.maximum_distance_of_two_complex_events:
-                    mutation_type = "MNV"
-                    mutation_description = "{length}bp_substitution".format(length=ref_str_len)
-                    start_pos = start_pos + left_shift
-                    end_pos = end_pos - right_shift
-                    mutation_events.append([start_pos, end_pos, ref_str, alt_str, mutation_type, mutation_description])
-                else:
-                    mismatches = {}
-                    poss = []
-                    pos = 0
-                    for ref_base, alt_base in zip(ref_str, alt_str):
-                        if ref_base != alt_base:
-                            mismatches[pos] = [ref_base, alt_base]
-                            poss.append(pos)
-                        pos += 1
-                    if len(mismatches) - 2 > (ref_str_len-2) * 0.5:  # define complex event and
-                        mutation_type = "Complex"
-                        mutation_description = "{length}bp_complex_span".format(length=ref_str_len)
-                        start_pos = start_pos + left_shift
-                        end_pos = end_pos - right_shift
-                        mutation_events.append(
-                            [start_pos, end_pos, ref_str, alt_str, mutation_type, mutation_description])
-
-                    else:
-                        events = []
-                        start = poss[0]
-                        end = poss[0]
-                        for pos in poss[1:]:
-                            if pos == end + 1:
-                                end = pos
-                            else:
-                                events.append([start, end])
-                                start = pos
-                                end = pos
-                        for item in events:
-                            sub_len = item[1] - item[0] + 1
-                            mutation_type = "Complex"
-                            mutation_description = "{length}bp_complex_span".format(length=sub_len)
-                            start_pos = start_pos + left_shift + item[0]
-                            end_pos = start_pos + left_shift + item[1]
-                            this_ref_str = ""
-                            this_alt_str = ""
-                            for pos in range(item[0], item[1] + 1):
-                                this_ref_str += mismatches[pos][0]
-                                this_alt_str += mismatches[pos][1]
-                            mutation_events.append(
-                                [start_pos, end_pos, this_ref_str, this_alt_str, mutation_type, mutation_description])
-        elif ref_str_len == 0:
-            mutation_type = "INS"
-            mutation_description = "{length}bp_insertion".format(length=alt_str_len)
-            start_pos = start_pos + left_shift - 1
-            end_pos = start_pos + left_shift
-            mutation_events.append([start_pos, end_pos, ref_str, alt_str, mutation_type, mutation_description])
-
-        elif alt_str_len == 0:
-            mutation_type = "DEL"
-            mutation_description = "{length}bp_deletion".format(length=ref_str_len)
-            start_pos = start_pos + left_shift
-            end_pos = end_pos - right_shift
-            mutation_events.append([start_pos, end_pos, ref_str, alt_str, mutation_type, mutation_description])
-
-        else:
-            mutation_type = "Complex"
-            mutation_description = "{length}bp_complex_span".format(length=ref_str_len)
-            start_pos = start_pos + left_shift
-            end_pos = end_pos - right_shift
-            mutation_events.append([start_pos, end_pos, ref_str, alt_str, mutation_type, mutation_description])
-        return mutation_events
 
     def build_patterns(self):
         if self.reads_phased:  # no mutation
