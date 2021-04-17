@@ -42,7 +42,7 @@ def global_init():
             "minimum_mapping_quality": 1,
             "minimum_support_reads": 2,
             "batch": 2000,
-            "debug": False,
+            "debug": "False",
             "microsatellite_region_format": "msisensor_scan",
             "only_homopolymers": False,
             "only_simple": False,
@@ -83,30 +83,7 @@ def global_init():
             "hap": False,
             "min_allele_fraction": 0.2,
         },
-        "benchmark": {
-            "reference": ".",
-            "threads": 4,
-            "minimum_mapping_quality": 1,
-            "minimum_support_reads": 2,
-            "microsatellite_region_format": "msisensor_scan",
-            "batch": 2000,
-            "debug": False,
-            "only_homopolymers": False,
-            "allow_mismatch": True,
-            "minimum_repeat_times": "1:8;2-5:5",
-            "maximum_repeat_times": "1-5:100",
-            "prefix_len": 5,
-            "suffix_len": 5,
-            "kmer_size": 5,
-            "minimum_phasing_reads": 3,
-            "tech": "ccs",
-            "hap": True,
-            "only_microsatellites": True,
-        },
-        "benchmark_merge": {
-            "sample": "sample",
-            "debug": False,
-        }
+
 
     }
 

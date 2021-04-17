@@ -219,7 +219,7 @@ def args_process():
                                    default=[defaultPara_qc["suffix_len"]],
                                    help="[suffix_len] bp downstream for sequencing quality analysis [default:" +
                                         str(defaultPara_qc["suffix_len"]) + "]")
-    qc_general_option.add_argument('-d', '--debug', type=bool, nargs=1, choices=[True, False],
+    qc_general_option.add_argument('-d', '--debug', type=str, nargs=1, choices=[True, False],
                                    default=[defaultPara_qc["debug"]],
                                    help="Debug mode for developers [default:" +
                                         str(defaultPara_qc["debug"]) + "]")

@@ -127,7 +127,7 @@ class Microsatellite:
 
     def set_read_dis_info(self, reads_info):
         # self.reads_info = reads_info
-        if len(reads_info)  <= 0:
+        if len(reads_info) <= 0:
             return
         dis = {}
         dis_strand = {True: {}, False: {}}
@@ -154,11 +154,16 @@ class Microsatellite:
             else:
                 errors.append(rp)
         for rp in errors:
-            dis_hap[0].pop(rp)
-            dis_hap[1].pop(rp)
-            dis_hap[2].pop(rp)
-            dis_strand[True].pop(rp)
-            dis_strand[True].pop(rp)
+            if rp in dis_hap[0]:
+                dis_hap[0].pop(rp)
+            if rp in dis_hap[1]:
+                dis_hap[1].pop(rp)
+            if rp in dis_hap[2]:
+                dis_hap[2].pop(rp)
+            if rp in dis_strand[True]:
+                dis_strand[True].pop(rp)
+            if rp in dis_strand[False]:
+                dis_strand[False].pop(rp)
         self.ms_error = errors
         self.dis_stat = True if self.depth > 0 else False
         self.ms_dis = dis
