@@ -74,5 +74,4 @@ plot_results(X, dpgmm.predict(X), dpgmm.means_, dpgmm.covariances_, 1,
 print("++++++++++++++++++++++++++++++++++++")
 print(dpgmm.means_)
 print(dpgmm.predict(X))
-
 plt.show()
