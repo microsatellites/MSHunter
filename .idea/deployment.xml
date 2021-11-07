@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="pengjia@192.168.20.4:22 agent">
+  <component name="PublishConfigData" autoUpload="Always" serverName="pengjia@10.181.7.169:65533" remoteFilesAllowedToDisappearOnAutoupload="false" autoUploadExternalChanges="true">
     <serverData>
-      <paths name="pengjia@192.168.20.4:22">
+      <paths name="pengjia@10.181.7.169:65533">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/DATA/ProjectSTR/codes/MSHunter" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="pengjia@192.168.20.4:22 agent">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/home/DATA/ProjectSTR/codes/MSHunter" local="$PROJECT_DIR$" />
+            <mapping deploy="/data/DATA/ProjectMSI/ProjectSTR/codes/MSHunter" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
     </serverData>
-    <option name="myAutoUpload" value="ON_EXPLICIT_SAVE" />
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>
