@@ -7,5 +7,6 @@ If you have any question about this software, please contact with Peng Jia (peng
 
 ```shell
 conda create -n msihunter
-conda install -c bioconda pysam,pandas,numpy 
+conda install -c bioconda pysam,pandas,numpy :wq
+
 ```
